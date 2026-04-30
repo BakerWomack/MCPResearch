@@ -1,0 +1,6 @@
+fastmcp
+sqlalchemy
+google-genai
+ollama
+anthropic
+httpx

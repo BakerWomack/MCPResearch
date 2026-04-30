@@ -1,0 +1,63 @@
+services:
+  cloud:
+    build:
+      context: ./Cloud
+      dockerfile: dockerfile
+    container_name: cloud-blob
+    ports:
+      - "9000:9000"
+    volumes:
+      - blob-data:/data
+
+  security-check:
+    build:
+      context: ./SecurityCheck
+      dockerfile: dockerfile
+    container_name: security-check
+    ports:
+      - "9001:9001"
+
+  mcp-server:
+    build:
+      context: ./MCP Server
+      dockerfile: dockerfile
+    container_name: mcp-testdb-server
+    ports:
+      - "3000:8000"
+    volumes:
+      - crm-data:/data
+    environment:
+      DATABASE_URL: "sqlite:////data/crm.db"
+      LLM_PROVIDER: "ollama"
+      GEMINI_API_KEY: ""
+      ANTHROPIC_API_KEY: ""
+      OLLAMA_HOST: "http://host.docker.internal:11434"
+      OLLAMA_MODEL: "qwen3:latest"
+      WEBAPP_URL: "http://webapp:8000"
+      FASTMCP_HOST: "0.0.0.0"
+      FASTMCP_PORT: "8000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  webapp:
+    build:
+      context: ./WebApp
+      dockerfile: dockerfile
+    container_name: webapp
+    ports:
+      - "8000:8000"
+    volumes:
+      - crm-data:/data
+    environment:
+      DATABASE_URL: "sqlite:////data/crm.db"
+      MCP_SERVER_URL: "http://mcp-server:8000/sse"
+      BLOB_STORAGE_URL: "http://cloud:9000"
+      SECURITY_CHECK_URL: "http://security-check:9001"
+    depends_on:
+      - cloud
+      - security-check
+      - mcp-server
+
+volumes:
+  blob-data:
+  crm-data:
