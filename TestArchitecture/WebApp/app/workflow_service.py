@@ -104,6 +104,8 @@ async def _check_vulnerable_path(
         f"[WORKFLOW {w()}] doc={doc_id} event=marked_safe_in_db  "
         f"elapsed={time.perf_counter()-t0:.4f}s  db_write_time={time.perf_counter()-t3:.4f}s"
     )
+    # Explicit marker: security check passed, MCP has not yet read the blob — window is open
+    print(f"[WORKFLOW {w()}] doc={doc_id} event=vulnerability_window_open  elapsed={time.perf_counter()-t0:.4f}s")
 
 
 async def run_document_workflow(document_id: int, user_prompt: str) -> str:
