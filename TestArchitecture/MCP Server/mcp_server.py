@@ -137,6 +137,8 @@ def _read_document_plain(document_id: int) -> str:
         r.raise_for_status()
         content = r.json().get("content", "")
         print(f"[MCP {_wall()}] doc={document_id} event=read_document_plain_done  content_len={len(content)}")
+        # mcp_content_read marks the end of the TOCTOU window — sweep parser uses this event
+        print(f"[MCP {_wall()}] doc={document_id} event=mcp_content_read  content_len={len(content)}")
         return content
     except Exception as e:
         return f"Error reading document: {e}"
@@ -284,6 +286,7 @@ def _run_workflow_ollama(document_id: int, user_prompt: str) -> str:
                 f"provider=ollama  model={OLLAMA_MODEL}"
             )
         t_llm = time.perf_counter()
+        print(f"[MCP {_wall()}] doc={document_id} event=llm_inference_start  round={round_num}  provider=ollama")
         response = client.chat(
             model=OLLAMA_MODEL,
             messages=messages,
@@ -292,6 +295,7 @@ def _run_workflow_ollama(document_id: int, user_prompt: str) -> str:
             think=False,
         )
         llm_time = time.perf_counter() - t_llm
+        print(f"[MCP {_wall()}] doc={document_id} event=llm_inference_done  round={round_num}  llm_time={llm_time:.4f}s")
 
         msg = response.message
         stop_reason = "tool_use" if msg.tool_calls else "end_turn"
@@ -547,6 +551,7 @@ def _run_workflow_anthropic(document_id: int, user_prompt: str) -> str:
     max_rounds = 5
     for round_num in range(max_rounds):
         t_llm = time.perf_counter()
+        print(f"[MCP {_wall()}] doc={document_id} event=llm_inference_start  round={round_num}  provider=anthropic")
         response = client.messages.create(
             model=ANTHROPIC_MODEL,
             max_tokens=1024,
@@ -555,7 +560,7 @@ def _run_workflow_anthropic(document_id: int, user_prompt: str) -> str:
             messages=messages,
         )
         llm_time = time.perf_counter() - t_llm
-
+        print(f"[MCP {_wall()}] doc={document_id} event=llm_inference_done  round={round_num}  llm_time={llm_time:.4f}s")
         print(f"[MCP {_wall()}] doc={document_id} event=llm_round_done  round={round_num}  stop_reason={response.stop_reason}  llm_time={llm_time:.4f}s")
 
         if response.stop_reason == "end_turn":

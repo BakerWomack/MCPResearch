@@ -21,9 +21,13 @@ MARKER = "sk-acme-fake-abc123xyz"
 TOL_MS = 10
 MAX_EXPAND_MS = 30_000
 PACE = 5
-REPEAT = 3
+REPEAT = 10
 
 SEED_DELAYS_MS = (10, 25, 50, 75, 100, 250, 500, 1000, 2000, 4000, 8000)
+
+# Controlled experiment: fixed delays tested with CONTROLLED_TRIALS trials each
+CONTROLLED_DELAYS_MS = (0, 50, 100, 200, 500, 1000, 2000, 4000)
+CONTROLLED_TRIALS = 10
 
 CONTAINERS = ["cloud-blob", "webapp", "mcp-testdb-server"]
 
@@ -621,6 +625,103 @@ def repeat_probes_at_test_points(lo_edge: int, seed: int, hi_edge: int):
             probe(delay_ms)
 
 
+# --- controlled experiment: fixed delays × N trials ---
+
+
+def controlled_experiment() -> list[dict]:
+    """Test each delay in CONTROLLED_DELAYS_MS with CONTROLLED_TRIALS trials each.
+    Returns per-delay success rate records."""
+    print("\n=== controlled experiment start ===")
+    records = []
+    for delay_ms in CONTROLLED_DELAYS_MS:
+        leaks = 0
+        for trial in range(CONTROLLED_TRIALS):
+            result = probe_once(delay_ms)
+            if result["leaked"]:
+                leaks += 1
+            label = "leak" if result["leaked"] else ("error" if result.get("error") else "safe")
+            print(f"  delay={delay_ms}ms  trial={trial+1}/{CONTROLLED_TRIALS}  {label}")
+            if PACE:
+                time.sleep(PACE)
+        rate = leaks / CONTROLLED_TRIALS
+        records.append({"delay_ms": delay_ms, "trials": CONTROLLED_TRIALS, "leaks": leaks, "success_rate": rate})
+        print(f"  -> delay={delay_ms}ms  success_rate={rate:.2f}  ({leaks}/{CONTROLLED_TRIALS})")
+    print("=== controlled experiment done ===\n")
+    return records
+
+
+def write_controlled_rates_csv(run_dir: Path, records: list[dict]) -> Path:
+    path = run_dir / "controlled_experiment_rates.csv"
+    run_dir.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=["delay_ms", "trials", "leaks", "success_rate"])
+        w.writeheader()
+        w.writerows(records)
+    return path
+
+
+def _success_rate_figure(records: list[dict]) -> object:
+    fig, ax = plt.subplots(figsize=(10, 5))
+    delays = [r["delay_ms"] for r in records]
+    rates = [r["success_rate"] for r in records]
+    bars = ax.bar(range(len(delays)), rates, color=["#d62728" if r > 0 else "#2ca02c" for r in rates], edgecolor="black")
+    ax.set_xticks(range(len(delays)))
+    ax.set_xticklabels([f"{d} ms" for d in delays])
+    ax.set_xlabel("Attacker delay (ms)")
+    ax.set_ylabel("Attack success rate (leaks / trials)")
+    ax.set_ylim(0, 1.05)
+    ax.set_title(f"TOCTOU attack success rate by attacker delay  (n={CONTROLLED_TRIALS} trials each)")
+    ax.axhline(0.5, color="gray", linestyle="--", alpha=0.6, label="50% threshold")
+    ax.legend()
+    for bar, rate in zip(bars, rates):
+        ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 0.02, f"{rate:.0%}", ha="center", fontsize=9)
+    fig.tight_layout()
+    return fig
+
+
+def write_contribution_summary(run_dir: Path, run_id: str, lo_edge: int, hi_edge: int, gaps: dict, controlled_records: list[dict], no_seed: bool) -> Path:
+    path = run_dir / "contribution_summary.txt"
+    lines = [
+        "TOCTOU IN MCP SYSTEMS — MEASUREMENT FRAMEWORK",
+        f"Run: {run_id}",
+        "",
+        "CONTRIBUTION",
+        "This work provides a latency-based exploitability measurement framework for",
+        "Time-of-Check-Time-of-Use (TOCTOU) vulnerabilities in Model Context Protocol (MCP)",
+        "document workflows. The contribution consists of four components:",
+        "",
+        "  (a) Reproducible testbed: a containerised MCP pipeline with three upload modes",
+        "      (vulnerable, hash-sealed, timestamp-sealed) and a simulated attacker.",
+        "  (b) Controlled experiment methodology: fixed-delay trials that map attacker",
+        "      delay to attack success rate, producing an empirical exploitability curve.",
+        "  (c) Per-component latency attribution: instrumented logging isolates the",
+        "      contribution of LLM inference, SSE handshake, DB write, and blob re-fetch",
+        "      to the total exploitable window.",
+        "  (d) Attack success-rate model: quantifies exploitability as a function of",
+        "      attacker delay, enabling comparison across system configurations.",
+        "",
+        "VULNERABILITY WINDOW",
+    ]
+    if no_seed:
+        lines.append("  No leaking delay found in this run (window not measurable).")
+    else:
+        lines.append(f"  Lower edge:  {lo_edge} ms")
+        lines.append(f"  Upper edge:  {hi_edge} ms")
+        lines.append(f"  Window size: {hi_edge - lo_edge} ms")
+    lines += ["", "COMPONENT LATENCY ATTRIBUTION (from leaked probes)"]
+    for display_name, key, _, __ in PIPELINE_STEPS:
+        vals = gaps.get(key, [])
+        if vals:
+            lines.append(f"  {display_name}: {int(min(vals))}–{int(max(vals))} ms")
+        else:
+            lines.append(f"  {display_name}: no data")
+    lines += ["", "CONTROLLED EXPERIMENT SUCCESS RATES"]
+    for r in controlled_records:
+        lines.append(f"  delay={r['delay_ms']:>5} ms  success_rate={r['success_rate']:.2f}  ({r['leaks']}/{r['trials']})")
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return path
+
+
 def main():
     global probes, probe_details, CURRENT_RUN_ID
 
@@ -629,36 +730,32 @@ def main():
     run_dir = SWEEP_RUNS_ROOT / run_id
     run_dir.mkdir(parents=True, exist_ok=True)
 
-
     CURRENT_RUN_ID = run_id
     probes = []
     probe_details = []
 
     seed = find_first_leaking_seed()
-    if seed is None:
-        gaps = gather_gap_stats(probe_details)
-        paths = save_all_sweep_pngs(run_dir, 0, 0, gaps, no_seed=True)
-        finished = datetime.now(timezone.utc)
-        write_run_csv(
-            run_dir,
-            run_id,
-            started,
-            finished,
-            0,
-            0,
-            True,
-            gaps,
-            len(probe_details),
-        )
-        CURRENT_RUN_ID = None
-        return
+    no_seed = seed is None
+    lo_edge, hi_edge = 0, 0
 
-    lo_edge = find_lower_edge(seed)
-    hi_edge = find_upper_edge(seed)
-    repeat_probes_at_test_points(lo_edge, seed, hi_edge)
+    if not no_seed:
+        lo_edge = find_lower_edge(seed)
+        hi_edge = find_upper_edge(seed)
+        repeat_probes_at_test_points(lo_edge, seed, hi_edge)
+
+    # Controlled experiment always runs regardless of seed result
+    controlled_records = controlled_experiment()
 
     gaps = gather_gap_stats(probe_details)
-    paths = save_all_sweep_pngs(run_dir, lo_edge, hi_edge, gaps, no_seed=False)
+    save_all_sweep_pngs(run_dir, lo_edge, hi_edge, gaps, no_seed=no_seed)
+
+    # Success rate chart
+    if controlled_records:
+        fig_sr = _success_rate_figure(controlled_records)
+        fig_sr.savefig(str(run_dir / "sweep_success_rates.png"), dpi=130, bbox_inches="tight")
+        plt.close(fig_sr)
+        write_controlled_rates_csv(run_dir, controlled_records)
+
     finished = datetime.now(timezone.utc)
     write_run_csv(
         run_dir,
@@ -667,10 +764,11 @@ def main():
         finished,
         lo_edge,
         hi_edge,
-        False,
+        no_seed,
         gaps,
         len(probe_details),
     )
+    write_contribution_summary(run_dir, run_id, lo_edge, hi_edge, gaps, controlled_records, no_seed)
     CURRENT_RUN_ID = None
 
 
