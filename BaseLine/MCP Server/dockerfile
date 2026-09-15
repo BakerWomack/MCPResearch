@@ -1,0 +1,18 @@
+# MCP Server - TestDB
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY database.py .
+COPY models.py .
+COPY mcp_server.py .
+
+# FastMCP SSE default port
+EXPOSE 8000
+
+CMD ["python", "mcp_server.py", "--server_type", "sse"]
