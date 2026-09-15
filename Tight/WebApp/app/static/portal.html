@@ -1,0 +1,832 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contacts — Enterprise CRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --surface-page: #f1f5f9;
+      --surface-0: #ffffff;
+      --surface-1: #f8fafc;
+      --surface-2: #f1f5f9;
+      --border: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --text: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --primary: #1d4ed8;
+      --primary-hover: #1e40af;
+      --primary-fg: #ffffff;
+      --accent: #0f766e;
+      --danger: #b91c1c;
+      --success: #15803d;
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+      --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
+      --font: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background: var(--surface-page);
+      font-family: var(--font);
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* —— Top bar —— */
+    .app-header {
+      background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+      color: #f8fafc;
+      border-bottom: 1px solid #334155;
+      box-shadow: var(--shadow-md);
+    }
+
+    .app-header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0.65rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: -0.02em;
+      flex-shrink: 0;
+    }
+
+    .brand-text {
+      min-width: 0;
+    }
+
+    .brand-text .product {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .brand-text .product-sub {
+      margin: 0;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    .header-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .env-pill {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0.25rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.15);
+      color: #86efac;
+      border: 1px solid rgba(34, 197, 94, 0.35);
+    }
+
+    .user-pill {
+      font-size: 0.8125rem;
+      color: #cbd5e1;
+      padding: 0.35rem 0.65rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid #475569;
+      background: rgba(15, 23, 42, 0.5);
+    }
+
+    /* —— Main layout —— */
+    .app-body {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 1.25rem;
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 1.25rem;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--surface-0);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .left {
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .section-kicker {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.125rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .hint {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.8125rem;
+      line-height: 1.45;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    label {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 96px;
+      resize: vertical;
+      border: 1px solid var(--border);
+      background: var(--surface-0);
+      border-radius: var(--radius-sm);
+      padding: 0.625rem 0.75rem;
+      font: inherit;
+      color: var(--text);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.15);
+    }
+
+    input[type="file"] {
+      width: 100%;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+    }
+
+    .btn-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    button {
+      border: 0;
+      border-radius: var(--radius-sm);
+      padding: 0.5rem 0.875rem;
+      font: inherit;
+      font-weight: 600;
+      font-size: 0.8125rem;
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+
+    button:active { transform: translateY(1px); }
+    button[disabled] { opacity: 0.55; cursor: not-allowed; }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--primary-fg);
+    }
+
+    .btn-primary:hover:not([disabled]) {
+      background: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background: var(--surface-0);
+      color: var(--text);
+      border: 1px solid var(--border-strong);
+    }
+
+    .btn-secondary:hover:not([disabled]) {
+      background: var(--surface-1);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid transparent;
+    }
+
+    .btn-ghost:hover:not([disabled]) {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+    }
+
+    .btn-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.375rem;
+    }
+
+    .btn-toolbar {
+      font-size: 0.8125rem;
+      padding: 0.4rem 0.65rem;
+    }
+
+    .meta {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      padding-top: 0.875rem;
+      margin-top: 0.125rem;
+      min-height: 1.25rem;
+    }
+
+    /* —— CRM column —— */
+    .right {
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 640px;
+      max-height: min(90vh, 880px);
+    }
+
+    .crm-board {
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.25rem;
+      flex: 0 0 auto;
+      max-height: 44%;
+      display: flex;
+      flex-direction: column;
+      min-height: 200px;
+      background: var(--surface-1);
+    }
+
+    .crm-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.75rem;
+    }
+
+    .crm-title {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+      flex-wrap: wrap;
+    }
+
+    .crm-title h2 {
+      margin: 0;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .crm-count {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--surface-0);
+      padding: 0.2rem 0.5rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+
+    .crm-actions {
+      display: flex;
+      gap: 0.375rem;
+      align-items: center;
+    }
+
+    .table-wrap {
+      overflow: auto;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface-0);
+      flex: 1;
+      min-height: 120px;
+    }
+
+    table.crm-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+    }
+
+    .crm-table thead th {
+      text-align: left;
+      padding: 0.5rem 0.875rem;
+      background: var(--surface-1);
+      color: var(--text-muted);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .crm-table tbody td {
+      padding: 0.5rem 0.875rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    .crm-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .crm-table tbody tr:hover td {
+      background: #f8fafc;
+    }
+
+    .crm-table .col-id {
+      width: 3.25rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      font-size: 0.75rem;
+    }
+
+    .crm-table .col-name {
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .crm-table .col-contact {
+      color: var(--text-secondary);
+      word-break: break-word;
+    }
+
+    .crm-empty {
+      padding: 1.5rem 1rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.8125rem;
+    }
+
+    .crm-empty strong {
+      display: block;
+      color: var(--text-secondary);
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+    }
+
+    .crm-loading {
+      padding: 1.25rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.8125rem;
+    }
+
+    .chat-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      padding: 1rem 1.25rem 1.25rem;
+      background: var(--surface-0);
+    }
+
+    .chat-header {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .stream {
+      flex: 1;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding-right: 0.25rem;
+      min-height: 160px;
+    }
+
+    .msg {
+      max-width: 95%;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.625rem 0.75rem;
+      white-space: pre-wrap;
+      animation: fadeIn 180ms ease-out;
+      font-size: 0.8125rem;
+      line-height: 1.45;
+    }
+
+    .msg.user {
+      align-self: flex-end;
+      background: #eff6ff;
+      border-color: #bfdbfe;
+      color: var(--text);
+    }
+
+    .msg.ai {
+      align-self: flex-start;
+      background: var(--surface-1);
+      border-color: var(--border);
+      color: var(--text);
+    }
+
+    .msg.sys {
+      align-self: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      background: var(--surface-1);
+      border-style: dashed;
+    }
+
+    .ok { color: var(--success); font-weight: 500; }
+    .err { color: var(--danger); font-weight: 500; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .spinning::before {
+      content: "";
+      display: inline-block;
+      width: 0.85em;
+      height: 0.85em;
+      margin-right: 0.35rem;
+      border: 2px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.65s linear infinite;
+      vertical-align: -0.12em;
+    }
+
+    @media (max-width: 960px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+
+      .right {
+        max-height: none;
+        min-height: 520px;
+      }
+
+      .crm-board {
+        max-height: 48vh;
+      }
+
+      .app-header-inner {
+        padding: 0.65rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="app-header" role="banner">
+    <div class="app-header-inner">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">NB</div>
+        <div class="brand-text">
+          <p class="product">Northbridge CRM</p>
+          <p class="product-sub">Customer operations · AI workspace</p>
+        </div>
+      </div>
+      <div class="header-meta">
+        <span class="env-pill">Production</span>
+        <span class="user-pill" title="Demo session">Session · Standard user</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-body">
+    <div class="shell">
+      <section class="panel left" aria-label="AI workspace">
+        <div>
+          <p class="section-kicker">Workspace</p>
+          <h1>Assistant &amp; document import</h1>
+          <p class="hint">One action: <strong>no attachment</strong> sends a chat message; <strong>with an attachment</strong> uploads the file and runs the document workflow on the contact directory.</p>
+        </div>
+
+        <div class="field">
+          <label for="prompt">Message</label>
+          <textarea id="prompt" placeholder="Type a question for chat, or add instructions for a file import (optional if you only need the default import)."></textarea>
+        </div>
+
+        <div class="field">
+          <label for="file">Attachment (optional)</label>
+          <input id="file" type="file" />
+        </div>
+
+        <div class="btn-row">
+          <button id="submitBtn" class="btn-primary btn-icon" type="button">Send message</button>
+          <button id="refreshBtn" class="btn-ghost btn-icon" type="button" title="Reload directory from server">↻ Sync contacts</button>
+        </div>
+
+        <div id="meta" class="meta">Ready.</div>
+      </section>
+
+      <section class="panel right" aria-label="Contacts and conversation">
+        <div class="crm-board">
+          <div class="crm-toolbar">
+            <div class="crm-title">
+              <h2>Contact directory</h2>
+              <span id="contactCount" class="crm-count">0 contacts</span>
+            </div>
+            <div class="crm-actions">
+              <button id="refreshHeaderBtn" type="button" class="btn-secondary btn-icon btn-toolbar">↻ Refresh</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <div id="crmLoading" class="crm-loading" hidden>Loading directory…</div>
+            <table class="crm-table" id="crmTable" hidden>
+              <thead>
+                <tr>
+                  <th class="col-id">ID</th>
+                  <th>Name</th>
+                  <th>Primary contact</th>
+                </tr>
+              </thead>
+              <tbody id="crmBody"></tbody>
+            </table>
+            <div id="crmEmpty" class="crm-empty" hidden>
+              <strong id="crmEmptyTitle">No contacts</strong>
+              <span id="crmEmptySub">Upload a document and complete the import workflow, or ask the assistant to create records.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-section">
+          <div class="chat-header">Activity &amp; assistant transcript</div>
+          <div id="stream" class="stream" role="log" aria-live="polite"></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const promptEl = document.getElementById("prompt");
+    const fileEl = document.getElementById("file");
+    const submitBtn = document.getElementById("submitBtn");
+    const refreshBtn = document.getElementById("refreshBtn");
+    const refreshHeaderBtn = document.getElementById("refreshHeaderBtn");
+    const stream = document.getElementById("stream");
+    const meta = document.getElementById("meta");
+    const crmBody = document.getElementById("crmBody");
+    const crmTable = document.getElementById("crmTable");
+    const crmEmpty = document.getElementById("crmEmpty");
+    const crmLoading = document.getElementById("crmLoading");
+    const contactCount = document.getElementById("contactCount");
+
+    let lastDocumentId = null;
+
+    const DEFAULT_DOC_PROMPT =
+      "Process this document: follow any instructions in the file (for example, import client records into CRM).";
+
+    function addMessage(kind, text) {
+      const el = document.createElement("div");
+      el.className = `msg ${kind}`;
+      el.textContent = text;
+      stream.appendChild(el);
+      stream.scrollTop = stream.scrollHeight;
+    }
+
+    function setBusy(busy, label) {
+      submitBtn.disabled = busy;
+      refreshBtn.disabled = busy;
+      refreshHeaderBtn.disabled = busy;
+      meta.textContent = label || (busy ? "Working…" : "Ready.");
+    }
+
+    function updateSubmitLabel() {
+      const hasFile = !!fileEl.files[0];
+      submitBtn.textContent = hasFile ? "Upload & run workflow" : "Send message";
+    }
+
+    function setCrmLoading(loading) {
+      crmLoading.hidden = !loading;
+      if (loading) {
+        crmTable.hidden = true;
+        crmEmpty.hidden = true;
+      }
+    }
+
+    function resetEmptyState() {
+      document.getElementById("crmEmptyTitle").textContent = "No contacts";
+      document.getElementById("crmEmptySub").textContent =
+        "Upload a document and complete the import workflow, or ask the assistant to create records.";
+    }
+
+    function renderClients(rows) {
+      crmBody.textContent = "";
+      const n = rows.length;
+      contactCount.textContent = n === 1 ? "1 contact" : `${n} contacts`;
+
+      if (!n) {
+        resetEmptyState();
+        crmTable.hidden = true;
+        crmEmpty.hidden = false;
+        return;
+      }
+
+      crmEmpty.hidden = true;
+      crmTable.hidden = false;
+      for (const c of rows) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td class="col-id">${escapeHtml(String(c.id))}</td>
+          <td class="col-name">${escapeHtml(c.name || "—")}</td>
+          <td class="col-contact">${escapeHtml(c.contact || "—")}</td>
+        `;
+        crmBody.appendChild(tr);
+      }
+    }
+
+    function escapeHtml(s) {
+      return s
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    async function loadClients({ quiet } = {}) {
+      if (!quiet) setCrmLoading(true);
+      try {
+        const r = await fetch("/api/clients");
+        if (!r.ok) {
+          const txt = await r.text();
+          throw new Error(`${r.status}: ${txt}`);
+        }
+        const rows = await r.json();
+        renderClients(rows);
+      } catch (err) {
+        if (!quiet) addMessage("sys", `Could not load contacts: ${err.message}`);
+        contactCount.textContent = "—";
+        crmTable.hidden = true;
+        crmEmpty.hidden = false;
+        document.getElementById("crmEmptyTitle").textContent = "Directory unavailable";
+        document.getElementById("crmEmptySub").textContent = err.message || "Check connectivity and select Refresh.";
+      } finally {
+        setCrmLoading(false);
+      }
+    }
+
+    function readPrompt() {
+      const prompt = (promptEl.value || "").trim();
+      if (!prompt) {
+        throw new Error("Please enter a message first.");
+      }
+      return prompt;
+    }
+
+    async function postJSON(url, body) {
+      const r = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+
+      if (!r.ok) {
+        const txt = await r.text();
+        throw new Error(`${r.status} ${r.statusText}: ${txt}`);
+      }
+
+      return r.json();
+    }
+
+    fileEl.addEventListener("change", updateSubmitLabel);
+
+    submitBtn.addEventListener("click", async () => {
+      const file = fileEl.files[0];
+      if (file) {
+        try {
+          const typed = (promptEl.value || "").trim();
+          const prompt = typed || DEFAULT_DOC_PROMPT;
+
+          addMessage("user", `${prompt}\n\n[Attached file: ${file.name}]`);
+          setBusy(true, "Uploading…");
+
+          const form = new FormData();
+          form.append("file", file, file.name);
+
+          const up = await fetch("/api/upload/vulnerable", { method: "POST", body: form });
+          if (!up.ok) {
+            const txt = await up.text();
+            throw new Error(`Upload failed: ${up.status} ${up.statusText}: ${txt}`);
+          }
+
+          const uploadData = await up.json();
+          lastDocumentId = uploadData.document_id;
+          meta.innerHTML = `<span class="ok">Uploaded.</span> Document ID: ${lastDocumentId}`;
+
+          setBusy(true, "Running workflow…");
+          const result = await postJSON("/api/workflow", {
+            document_id: lastDocumentId,
+            user_prompt: prompt
+          });
+
+          addMessage("ai", result.reply || "(No response)");
+          setBusy(false, `Workflow complete · document ${lastDocumentId}.`);
+          await loadClients({ quiet: true });
+        } catch (err) {
+          addMessage("sys", `Error: ${err.message}`);
+          meta.innerHTML = '<span class="err">Workflow failed.</span>';
+          setBusy(false);
+        }
+        return;
+      }
+
+      try {
+        const prompt = readPrompt();
+        addMessage("user", prompt);
+        setBusy(true, "Requesting assistant…");
+
+        const data = await postJSON("/api/chat", { user_prompt: prompt });
+        addMessage("ai", data.reply || "(No response)");
+        setBusy(false, "Message sent.");
+      } catch (err) {
+        addMessage("sys", `Error: ${err.message}`);
+        meta.innerHTML = '<span class="err">Request failed.</span>';
+        setBusy(false);
+      }
+    });
+
+    updateSubmitLabel();
+
+    function bindRefresh(el) {
+      el.addEventListener("click", async () => {
+        el.classList.add("spinning");
+        setBusy(true, "Syncing directory…");
+        await loadClients({ quiet: true });
+        meta.textContent = "Contact directory updated.";
+        el.classList.remove("spinning");
+        setBusy(false);
+      });
+    }
+    bindRefresh(refreshBtn);
+    bindRefresh(refreshHeaderBtn);
+
+    addMessage("sys", "Session started. Contact directory loads from the CRM data store.");
+    loadClients({ quiet: true });
+  </script>
+</body>
+</html>

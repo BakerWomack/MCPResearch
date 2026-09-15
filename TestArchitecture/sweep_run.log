@@ -1,0 +1,156 @@
+10 ms  leak
+0 ms  leak
+20 ms  leak
+40 ms  leak
+80 ms  leak
+160 ms  leak
+320 ms  leak
+640 ms  no leak
+325 ms  leak
+482 ms  no leak
+403 ms  leak
+442 ms  leak
+462 ms  leak
+472 ms  no leak
+0 ms  leak
+0 ms  no leak
+0 ms  no leak
+0 ms  no leak
+0 ms  no leak
+0 ms  no leak
+0 ms  no leak
+0 ms  no leak
+0 ms  no leak
+0 ms  leak
+5 ms  leak
+5 ms  no leak
+5 ms  no leak
+5 ms  no leak
+5 ms  no leak
+5 ms  no leak
+5 ms  no leak
+5 ms  leak
+5 ms  no leak
+5 ms  no leak
+10 ms  no leak
+10 ms  no leak
+10 ms  no leak
+10 ms  no leak
+10 ms  no leak
+10 ms  leak
+10 ms  no leak
+10 ms  no leak
+10 ms  no leak
+10 ms  no leak
+236 ms  leak
+236 ms  leak
+236 ms  leak
+236 ms  leak
+236 ms  leak
+236 ms  leak
+236 ms  leak
+236 ms  leak
+236 ms  leak
+236 ms  leak
+462 ms  leak
+462 ms  no leak
+462 ms  leak
+462 ms  leak
+462 ms  leak
+462 ms  leak
+462 ms  leak
+462 ms  leak
+462 ms  leak
+462 ms  leak
+
+=== controlled experiment start ===
+  delay=0ms  trial=1/10  leak
+  delay=0ms  trial=2/10  leak
+  delay=0ms  trial=3/10  safe
+  delay=0ms  trial=4/10  safe
+  delay=0ms  trial=5/10  safe
+  delay=0ms  trial=6/10  safe
+  delay=0ms  trial=7/10  safe
+  delay=0ms  trial=8/10  safe
+  delay=0ms  trial=9/10  safe
+  delay=0ms  trial=10/10  safe
+  -> delay=0ms  success_rate=0.20  (2/10)
+  delay=50ms  trial=1/10  leak
+  delay=50ms  trial=2/10  leak
+  delay=50ms  trial=3/10  leak
+  delay=50ms  trial=4/10  leak
+  delay=50ms  trial=5/10  leak
+  delay=50ms  trial=6/10  leak
+  delay=50ms  trial=7/10  leak
+  delay=50ms  trial=8/10  leak
+  delay=50ms  trial=9/10  leak
+  delay=50ms  trial=10/10  leak
+  -> delay=50ms  success_rate=1.00  (10/10)
+  delay=100ms  trial=1/10  leak
+  delay=100ms  trial=2/10  leak
+  delay=100ms  trial=3/10  leak
+  delay=100ms  trial=4/10  leak
+  delay=100ms  trial=5/10  leak
+  delay=100ms  trial=6/10  leak
+  delay=100ms  trial=7/10  leak
+  delay=100ms  trial=8/10  leak
+  delay=100ms  trial=9/10  leak
+  delay=100ms  trial=10/10  leak
+  -> delay=100ms  success_rate=1.00  (10/10)
+  delay=200ms  trial=1/10  leak
+  delay=200ms  trial=2/10  leak
+  delay=200ms  trial=3/10  leak
+  delay=200ms  trial=4/10  leak
+  delay=200ms  trial=5/10  leak
+  delay=200ms  trial=6/10  leak
+  delay=200ms  trial=7/10  leak
+  delay=200ms  trial=8/10  leak
+  delay=200ms  trial=9/10  leak
+  delay=200ms  trial=10/10  leak
+  -> delay=200ms  success_rate=1.00  (10/10)
+  delay=500ms  trial=1/10  safe
+  delay=500ms  trial=2/10  safe
+  delay=500ms  trial=3/10  safe
+  delay=500ms  trial=4/10  safe
+  delay=500ms  trial=5/10  safe
+  delay=500ms  trial=6/10  safe
+  delay=500ms  trial=7/10  safe
+  delay=500ms  trial=8/10  safe
+  delay=500ms  trial=9/10  safe
+  delay=500ms  trial=10/10  safe
+  -> delay=500ms  success_rate=0.00  (0/10)
+  delay=1000ms  trial=1/10  safe
+  delay=1000ms  trial=2/10  safe
+  delay=1000ms  trial=3/10  safe
+  delay=1000ms  trial=4/10  safe
+  delay=1000ms  trial=5/10  safe
+  delay=1000ms  trial=6/10  safe
+  delay=1000ms  trial=7/10  safe
+  delay=1000ms  trial=8/10  safe
+  delay=1000ms  trial=9/10  safe
+  delay=1000ms  trial=10/10  safe
+  -> delay=1000ms  success_rate=0.00  (0/10)
+  delay=2000ms  trial=1/10  safe
+  delay=2000ms  trial=2/10  safe
+  delay=2000ms  trial=3/10  safe
+  delay=2000ms  trial=4/10  safe
+  delay=2000ms  trial=5/10  safe
+  delay=2000ms  trial=6/10  safe
+  delay=2000ms  trial=7/10  safe
+  delay=2000ms  trial=8/10  safe
+  delay=2000ms  trial=9/10  safe
+  delay=2000ms  trial=10/10  safe
+  -> delay=2000ms  success_rate=0.00  (0/10)
+  delay=4000ms  trial=1/10  safe
+  delay=4000ms  trial=2/10  safe
+  delay=4000ms  trial=3/10  safe
+  delay=4000ms  trial=4/10  safe
+  delay=4000ms  trial=5/10  safe
+  delay=4000ms  trial=6/10  safe
+  delay=4000ms  trial=7/10  safe
+  delay=4000ms  trial=8/10  safe
+  delay=4000ms  trial=9/10  safe
+  delay=4000ms  trial=10/10  safe
+  -> delay=4000ms  success_rate=0.00  (0/10)
+=== controlled experiment done ===
+
