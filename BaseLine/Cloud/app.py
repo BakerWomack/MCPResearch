@@ -2,6 +2,7 @@ import os
 from datetime import datetime, timezone
 from pathlib import Path
 
+import jwt
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import Response
 
@@ -12,7 +13,6 @@ ROOT.mkdir(parents=True, exist_ok=True)
 
 
 def _wall():
-    """UTC time HH:MM:SS.mmm for cross-container logs."""
     return datetime.now(timezone.utc).strftime("%H:%M:%S.%f")
 
 
@@ -27,30 +27,34 @@ def _preview(data: bytes) -> str:
     return data[:80].decode("utf-8", errors="replace").replace("\n", "\\n")
 
 
+JWT_SECRET = os.environ.get("JWT_SECRET", "dev-secret-change-me")
+JWT_ALG = "HS256"
+
+
+def _check_upload_token(key: str, request: Request) -> None:
+    token = request.headers.get("x-upload-token", "")
+    if not token:
+        raise HTTPException(status_code=401, detail="missing upload token")
+    try:
+        claims = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALG])
+    except jwt.PyJWTError as e:
+        raise HTTPException(status_code=403, detail=f"invalid upload token: {e}")
+    if claims.get("key") != key:
+        raise HTTPException(status_code=403, detail="token is not valid for this key")
+
+
 @app.put("/object/{key}")
 async def put_object(key: str, request: Request):
+    _check_upload_token(key, request)
     body = await request.body()
     path = _safe_object_path(key)
     print(f"[BLOB {_wall()}] key={key} event=object_put_start")
     path.write_bytes(body)
     print(f"[BLOB {_wall()}] key={key} event=object_put_done")
-    mtime = path.stat().st_mtime
     src = request.client.host if request.client else "?"
     pv = _preview(body)
     print(f"[BLOB {_wall()}] PUT {key}  src={src}  size={len(body)}  preview={pv!r}")
-    return {"key": key, "size": len(body), "mtime": mtime}
-
-
-@app.head("/object/{key}")
-async def head_object(key: str, request: Request):
-    """Return blob metadata without body (for timestamp sealing)."""
-    path = _safe_object_path(key)
-    if not path.exists():
-        raise HTTPException(status_code=404, detail="not found")
-    mtime = path.stat().st_mtime
-    src = request.client.host if request.client else "?"
-    print(f"[BLOB {_wall()}] HEAD {key}  src={src}  mtime={mtime}")
-    return Response(headers={"X-Blob-Mtime": str(mtime)})
+    return {"key": key, "size": len(body)}
 
 
 @app.get("/object/{key}")
@@ -64,11 +68,3 @@ async def get_object(key: str, request: Request):
     pv = _preview(data)
     print(f"[BLOB {_wall()}] GET {key}  src={src}  size={len(data)}  preview={pv!r}")
     return Response(content=data, media_type="application/octet-stream")
-
-
-@app.delete("/object/{key}")
-async def delete_object(key: str):
-    path = _safe_object_path(key)
-    if path.exists():
-        path.unlink()
-    return {"key": key, "deleted": True}

@@ -1,4 +1,3 @@
-# WebApp - talks to MCP server for clients and chat
 FROM python:3.11-slim
 
 WORKDIR /app

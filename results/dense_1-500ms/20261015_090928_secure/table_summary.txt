@@ -1,0 +1,5 @@
+Config	Trials	Followed	Leaked	Rejected	Blocked	In-window	Followed | in-win	Leak | in-win	Leak | followed	Followed edge	Last followed
+Secure	2500	0%	0%	86%	0%	2148	0%	0%	-	-	-
+
+Followed edge: first 10 ms bin where the followed rate falls below 50%.
+In-window: the overwrite completed between the scan read (T_check) and the agent's read (T_use).

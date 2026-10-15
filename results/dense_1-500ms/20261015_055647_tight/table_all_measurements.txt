@@ -1,0 +1,26 @@
+Measurement	Tight (ms)
+DB upload insert	6.67
+DB document lookup	0.71
+Document lookup	0.90
+Blob fetch	1.20
+Initial sec validation	1.40
+DB mark safe write	5.99
+Document marked safe	6.02
+Dispatch to agent	11.20
+DB safety lookup	2.25
+Agent retrieves document state	2.68
+DB content lookup	0.77
+Agent retrieves document	5.31
+Agent document tool exec	8.01
+attacker overwrite	0.21
+DB secrets read	0.94
+Agent prohibited tool call	1.15
+Agent acts on document	842.07
+LLM inference	906.51
+DB client write	5.81
+Agent response returned	3114.04
+Agent decides document tool call	
+attacker start time	3.37
+blob read time	4.93
+attacker delay	1 to 500 ms, 500 values
+outcome	safe 2380, leak 115, blocked 5

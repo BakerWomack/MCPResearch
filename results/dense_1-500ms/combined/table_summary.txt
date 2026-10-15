@@ -1,0 +1,8 @@
+Config	Trials	Followed	Leaked	Rejected	Blocked	In-window	Followed | in-win	Leak | in-win	Leak | followed	Followed edge	Last followed
+BaseLine	2500	91%	73%	0%	0%	2271	100%	80%	80%	~461 ms	456 ms
+Tight	2500	5%	5%	0%	0%	129	100%	89%	89%	~31 ms	218 ms
+Tight-both	2500	5%	1%	0%	0%	114	100%	17%	17%	~21 ms	38 ms
+Secure	2500	0%	0%	86%	0%	2148	0%	0%	-	-	-
+
+Followed edge: first 10 ms bin where the followed rate falls below 50%.
+In-window: the overwrite completed between the scan read (T_check) and the agent's read (T_use).

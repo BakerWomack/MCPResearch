@@ -1,143 +1,103 @@
+import json
 import time
 import uuid
 from pathlib import Path
 
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.responses import FileResponse
-from pydantic import BaseModel
-from sqlalchemy import text
-from sqlalchemy.exc import OperationalError
+from pydantic import BaseModel, Field
 
-from database import Base, SessionLocal, engine
+from database import SessionLocal
 from models import Client, Document
-from app.cloud import get_blob, head_blob_mtime, put_blob
 from app import mcp_client
-from app.util import wall_clock_ms
-from app.workflow_service import run_document_workflow, upload_kind_lower
+from app.auth import (BLOB_PUBLIC_URL, UPLOAD_TOKEN_TTL_SECONDS,
+                      check_password, issue_token, issue_upload_token,
+                      require_auth)
+from app.util import db_span
+from app.workflow_service import run_document_workflow
 
 app = FastAPI()
 
-Base.metadata.create_all(bind=engine)
+
+class LoginBody(BaseModel):
+    username: str
+    password: str
 
 
-def _migrate_documents():
-    """Add columns to existing SQLite documents table (idempotent)."""
-    stmts = [
-        "ALTER TABLE documents ADD COLUMN upload_kind VARCHAR",
-        "ALTER TABLE documents ADD COLUMN seal_mtime REAL",
-    ]
-    with engine.begin() as conn:
-        for sql in stmts:
-            try:
-                conn.execute(text(sql))
-            except OperationalError:
-                pass
+@app.post("/api/login")
+def login(body: LoginBody):
+    if not check_password(body.username, body.password):
+        raise HTTPException(401, "invalid username or password")
+    return {"access_token": issue_token(body.username), "token_type": "bearer"}
 
 
-_migrate_documents()
+class UploadRequest(BaseModel):
+    filename: str = "upload.csv"
 
 
-@app.post("/api/upload/vulnerable")
-async def upload_vulnerable(file: UploadFile = File(...)):
-    """Store blob only; security check runs at workflow time (TOCTOU window)."""
+@app.post("/api/upload/vulnerable", dependencies=[Depends(require_auth)])
+def upload_vulnerable(body: UploadRequest):
     t0 = time.perf_counter()
-    data = await file.read()
-    print(f"[UPLOAD/vulnerable] read file: {time.perf_counter()-t0:.3f}s")
+    key = uuid.uuid4().hex + Path(body.filename or "").suffix
 
-    key = uuid.uuid4().hex + Path(file.filename or "").suffix
-    t1 = time.perf_counter()
-    await put_blob(key, data)
-    print(f"[UPLOAD/vulnerable] put_blob: {time.perf_counter()-t1:.3f}s")
-
-    t2 = time.perf_counter()
     db = SessionLocal()
     try:
-        doc = Document(
-            blob_key=key,
-            safe=False,
-            upload_kind="vulnerable",
-            seal_mtime=None,
-        )
-        db.add(doc)
-        db.commit()
-        db.refresh(doc)
-        print(f"[UPLOAD/vulnerable] db commit: {time.perf_counter()-t2:.3f}s")
-        print(f"[UPLOAD/vulnerable] total: {time.perf_counter()-t0:.3f}s")
+        doc = Document(blob_key=key, safe=False)
+        with db_span(lambda: doc.id, "upload_insert"):
+            db.add(doc)
+            db.commit()
+            db.refresh(doc)
+        print(f"[UPLOAD/vulnerable] issued slot: {time.perf_counter()-t0:.3f}s  key={key}")
         return {
-            "filename": file.filename,
+            "filename": body.filename,
             "saved_as": key,
             "document_id": doc.id,
-            "upload_kind": "vulnerable",
+            "upload_url": f"{BLOB_PUBLIC_URL}/object/{key}",
+            "upload_token": issue_upload_token(key),
+            "expires_in": UPLOAD_TOKEN_TTL_SECONDS,
         }
     finally:
         db.close()
 
 
-@app.get("/api/documents/{doc_id}/safety")
 def get_safety(doc_id: int):
     db = SessionLocal()
     try:
-        doc = db.query(Document).filter(Document.id == doc_id).first()
+        with db_span(doc_id, "safety_lookup"):
+            doc = db.query(Document).filter(Document.id == doc_id).first()
         if not doc:
             raise HTTPException(404, "not found")
-        return {
-            "safe": doc.safe,
-            "sechash": doc.sechash,
-            "upload_kind": upload_kind_lower(doc),
-            "seal_mtime": doc.seal_mtime,
-        }
+        return {"safe": doc.safe, "sechash": doc.sechash}
     finally:
         db.close()
 
 
-@app.get("/api/documents/{doc_id}/blob-mtime")
-async def get_blob_mtime(doc_id: int):
-    """Current blob object mtime in storage (for secure-timestamp verification)."""
-    db = SessionLocal()
-    try:
-        doc = db.query(Document).filter(Document.id == doc_id).first()
-        if not doc:
-            raise HTTPException(404, "not found")
-        mt = await head_blob_mtime(doc.blob_key)
-        return {"mtime": mt}
-    finally:
-        db.close()
+def _history_json(turns) -> str:
+    return json.dumps([{"role": t.role, "content": t.content} for t in turns])
 
 
-@app.get("/api/documents/{doc_id}/content")
-async def get_content(doc_id: int):
-    db = SessionLocal()
-    try:
-        doc = db.query(Document).filter(Document.id == doc_id).first()
-        if not doc:
-            raise HTTPException(404, "not found")
-        raw = await get_blob(doc.blob_key)
-        content = raw.decode("utf-8", errors="replace")
-        w = wall_clock_ms()
-        print(
-            f"[WORKFLOW {w}] doc={doc_id} event=mcp_content_read  "
-            f"content_len={len(content)}  blob={doc.blob_key}"
-        )
-        return {"content": content}
-    finally:
-        db.close()
+class Turn(BaseModel):
+    role: str
+    content: str
 
 
 class WorkflowBody(BaseModel):
     document_id: int
     user_prompt: str
+    history: list[Turn] = Field(default_factory=list)
 
 
 class ChatBody(BaseModel):
     user_prompt: str
+    history: list[Turn] = Field(default_factory=list)
 
 
-@app.get("/api/clients")
+@app.get("/api/clients", dependencies=[Depends(require_auth)])
 def list_clients():
-    """List CRM clients (same database as the MCP server when DATABASE_URL is shared)."""
     db = SessionLocal()
     try:
-        rows = db.query(Client).order_by(Client.id).all()
+        with db_span(0, "clients_list"):
+            rows = db.query(Client).order_by(Client.id).all()
         return [
             {"id": c.id, "name": c.name, "contact": c.contact}
             for c in rows
@@ -154,19 +114,21 @@ def portal_index():
     return FileResponse(portal)
 
 
-@app.post("/api/chat")
+@app.post("/api/chat", dependencies=[Depends(require_auth)])
 async def direct_chat(body: ChatBody):
     prompt = (body.user_prompt or "").strip()
     if not prompt:
         raise HTTPException(400, "user_prompt is required")
 
-    reply = await mcp_client.run_chat(prompt)
+    reply = await mcp_client.run_chat(prompt, _history_json(body.history))
     if reply.startswith("Error calling MCP"):
         raise HTTPException(502, reply)
     return {"reply": reply}
 
 
-@app.post("/api/workflow")
+@app.post("/api/workflow", dependencies=[Depends(require_auth)])
 async def workflow(body: WorkflowBody):
-    reply = await run_document_workflow(body.document_id, body.user_prompt)
+    reply = await run_document_workflow(
+        body.document_id, body.user_prompt, _history_json(body.history)
+    )
     return {"reply": reply}

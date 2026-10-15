@@ -1,0 +1,14 @@
+Step	Description	Mean (ms)	Trials
+1	Benign upload (document row insert only)	6.67	2500
+2	Workflow request	0.90	2500
+3	WebApp fetches bytes for scan (T_check)	1.20	2500
+4	Attacker overwrite	0.21	2500
+5	Content scan	1.40	2500
+6	Verdict written to database	6.02	2495
+7	Dispatch to the agent	11.20	2495
+8	LLM inference	906.51	2495
+9	Agent checks the SAFE flag	2.68	2495
+10	Time of use read (T_use)	5.31	2495
+11	Reasoning under injected context	842.07	807
+12	Prohibited tool call	1.15	129
+13	Response returned to the webapp	3114.04	129

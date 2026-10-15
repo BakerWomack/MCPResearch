@@ -1,0 +1,16 @@
+Step	Description	Starts at (ms)	Ends at (ms)	Trials
+1	Benign upload (document row insert only)	-10.13	-4.64	2499
+2	Workflow request	0.00	0.87	2499
+3	WebApp fetches bytes for scan (T_check)	0.87	2.17	2499
+4	Attacker overwrite	164.85	165.01	2499
+5	Content scan	2.17	3.61	2499
+6	Verdict written to database	3.61	7.05	2417
+7	Dispatch to the agent	7.07	18.02	2417
+8	LLM inference	21.08	444.26	2417
+9	Agent checks the SAFE flag	444.30	445.73	2417
+10	Time of use read (T_use)	445.74	451.40	2417
+11	Reasoning under injected context	451.41	928.78	2231
+12	Prohibited tool call	896.85	898.01	2059
+13	Response returned to the webapp	898.01	3580.12	2059
+-	T_check, window opens	1.64	1.64	2499
+-	T_use, window closes	451.40	451.40	2417

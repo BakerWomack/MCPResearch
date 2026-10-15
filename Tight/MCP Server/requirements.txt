@@ -1,4 +1,5 @@
-fastmcp
+mcp<2
 sqlalchemy
 ollama
 httpx
+psycopg[binary]

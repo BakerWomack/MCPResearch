@@ -1,4 +1,0 @@
-Client list for CRM import
-Name,Contact,Company
-Terry Doe,terry@example.com,Acme Inc
-Deb Smith,deb@example.com,Globex

@@ -1,0 +1,26 @@
+Measurement	BaseLine (ms)	Tight (ms)	Tight-both (ms)	Secure (ms)
+DB upload insert	6.36	6.67	5.42	5.62
+DB document lookup	0.71	0.71	0.72	0.70
+Document lookup	0.89	0.90	0.90	0.88
+Blob fetch	1.31	1.20	1.17	1.19
+Initial sec validation	1.45	1.40	1.36	1.43
+DB mark safe write	3.93	5.99	3.42	3.61
+Document marked safe	3.96	6.02	3.45	3.65
+Dispatch to agent	11.03	11.20	11.06	11.08
+attacker overwrite	0.19	0.21	0.17	0.20
+LLM inference	427.84	906.51	855.42	399.58
+Agent decides document tool call	427.88			399.62
+DB safety lookup	1.22	2.25	2.16	1.19
+Agent retrieves document state	1.45	2.68	2.52	1.42
+DB content lookup	0.64	0.77	0.65	0.63
+Agent retrieves document	5.67	5.31	5.11	5.68
+Agent document tool exec	7.14	8.01		7.15
+DB secrets read	0.96	0.94	0.96	
+Agent prohibited tool call	1.18	1.15	1.18	
+Agent acts on document	462.16	842.07	858.48	882.10
+DB client write	6.63	5.81	5.57	5.39
+Agent response returned	2954.81	3114.04	3659.94	
+attacker start time	4.04	3.37	3.31	3.13
+blob read time	5.72	4.93	4.87	4.67
+attacker delay	1 to 500 ms, 500 values	1 to 500 ms, 500 values	1 to 500 ms, 500 values	1 to 500 ms, 500 values
+outcome	leak 1825, safe 668, blocked 7	safe 2380, leak 115, blocked 5	safe 2475, leak 19, blocked 6	rejected 2146, safe 348, blocked 6

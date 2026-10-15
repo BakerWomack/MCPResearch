@@ -1,6 +1,24 @@
 name: tight
 
 services:
+  db:
+    image: postgres:16-alpine
+    container_name: tight-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: crm
+      POSTGRES_PASSWORD: crm
+      POSTGRES_DB: crm
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U crm -d crm"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
   cloud:
     build:
       context: ./Cloud
@@ -8,6 +26,8 @@ services:
     container_name: tight-cloud-blob
     ports:
       - "9000:9000"
+    environment:
+      JWT_SECRET: "${JWT_SECRET:-dev-secret-change-me}"
     volumes:
       - blob-data:/data
 
@@ -26,18 +46,20 @@ services:
     container_name: tight-mcp-server
     ports:
       - "3000:8000"
-    volumes:
-      - crm-data:/data
     environment:
-      DATABASE_URL: "sqlite:////data/crm.db"
-      LLM_PROVIDER: "ollama"
+      DATABASE_URL: "postgresql+psycopg://crm:crm@db:5432/crm"
       OLLAMA_HOST: "http://host.docker.internal:11434"
       OLLAMA_MODEL: "${OLLAMA_MODEL:-qwen3:latest}"
-      WEBAPP_URL: "http://webapp:8000"
+      BLOB_STORAGE_URL: "http://cloud:9000"
       FASTMCP_HOST: "0.0.0.0"
       FASTMCP_PORT: "8000"
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    depends_on:
+      db:
+        condition: service_healthy
+      cloud:
+        condition: service_started
 
   webapp:
     build:
@@ -46,18 +68,26 @@ services:
     container_name: tight-webapp
     ports:
       - "8010:8000"
-    volumes:
-      - crm-data:/data
     environment:
-      DATABASE_URL: "sqlite:////data/crm.db"
+      DATABASE_URL: "postgresql+psycopg://crm:crm@db:5432/crm"
       MCP_SERVER_URL: "http://mcp-server:8000/sse"
       BLOB_STORAGE_URL: "http://cloud:9000"
       SECURITY_CHECK_URL: "http://security-check:9001"
+      BLOB_PUBLIC_URL: "${BLOB_PUBLIC_URL:-http://127.0.0.1:9000}"
+      JWT_SECRET: "${JWT_SECRET:-dev-secret-change-me}"
+      JWT_TTL_SECONDS: "${JWT_TTL_SECONDS:-21600}"
+      PORTAL_USERNAME: "${PORTAL_USERNAME:-analyst}"
+      PORTAL_PASSWORD: "${PORTAL_PASSWORD:-analyst-password}"
     depends_on:
-      - cloud
-      - security-check
-      - mcp-server
+      db:
+        condition: service_healthy
+      cloud:
+        condition: service_started
+      security-check:
+        condition: service_started
+      mcp-server:
+        condition: service_started
 
 volumes:
   blob-data:
-  crm-data:
+  db-data:

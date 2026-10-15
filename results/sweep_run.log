@@ -1,0 +1,265 @@
+[17:49:41] PREFLIGHT FAILED: docker is not responding; is Docker Desktop running?
+[17:50:11] note: something already listens on 5432 (db) -- harmless, the stack reaches these over the compose network
+[17:50:12] preflight ok: docker up, ports free, ollama has qwen3:latest
+[17:50:19] Tight-temp: starting fresh (wiping volumes)
+[17:51:08] Tight-temp: cloud Up 34 seconds | db Up 34 seconds (healthy) | mcp-server Up 24 seconds | security-check Up 34 seconds | webapp Up 20 seconds |
+[17:51:25] Tight-temp: sweeping 25 delays x 100 trials = 2500 runs
+[17:52:27] Tight-temp:   1 ms  leak 5/100 = 5%
+[17:59:03] Tight-temp:   2 ms  leak 90/100 = 90%
+[18:06:05] Tight-temp:   3 ms  leak 99/100 = 99%
+[18:13:07] Tight-temp:   4 ms  leak 92/100 = 92%
+[18:20:05] Tight-temp:   5 ms  leak 90/100 = 90%
+[18:27:13] Tight-temp:   6 ms  leak 86/100 = 86%
+[18:34:17] Tight-temp:   7 ms  leak 87/100 = 87%
+[18:41:30] Tight-temp:   8 ms  leak 89/100 = 89%
+[18:48:38] Tight-temp:   9 ms  leak 87/100 = 87%
+[18:55:39] Tight-temp:  10 ms  leak 91/100 = 91%
+[19:02:19] Tight-temp:  20 ms  leak 66/100 = 66%
+[19:05:27] Tight-temp:  40 ms  leak 1/100 = 1%
+[19:08:40] Tight-temp:  60 ms  leak 0/100 = 0%
+[19:12:00] Tight-temp:  80 ms  leak 0/100 = 0%
+[19:15:19] Tight-temp: 100 ms  leak 0/100 = 0%
+[19:19:00] Tight-temp: 150 ms  leak 0/100 = 0%
+[19:22:21] Tight-temp: 200 ms  leak 0/100 = 0%
+[19:25:40] Tight-temp: 250 ms  leak 0/100 = 0%
+[19:29:00] Tight-temp: 300 ms  leak 0/100 = 0%
+[19:32:24] Tight-temp: 350 ms  leak 0/100 = 0%
+[19:35:46] Tight-temp: 400 ms  leak 0/100 = 0%
+[21:05:48] note: something already listens on 5432 (db) -- harmless, the stack reaches these over the compose network
+[21:05:48] preflight ok: docker up, ports free, ollama has qwen3:latest
+[21:05:48] DRY RUN -- nothing was started. Plan was:
+[21:05:48]   configs : BaseLine, Tight, Secure
+[21:05:48]   sweep   : 500 delays x 5 trials = 2500 trials per config, 7500 total
+[21:05:48]   delays  : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 480, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499, 500]
+[21:05:48]   output  : C:\Users\Bwomack\Documents\MCPResearch\results\dense_1-500ms\<UTC timestamp>_<config>\
+[21:05:48]   figures : per config, plus combined/
+[02:58:27] note: something already listens on 5432 (db) -- harmless, the stack reaches these over the compose network
+[02:58:27] preflight ok: docker up, ports free, ollama has qwen3:latest
+[02:58:27] DRY RUN -- nothing was started. Plan was:
+[02:58:27]   configs : BaseLine (BaseLine), Tight (Tight), Tight-both (Old/tight-both), Secure (Secure)
+[02:58:27]   sweep   : 1-500 ms, 500 delays x 5 trials = 2500 per config, 10000 total
+[02:58:27]   output  : C:\Users\Bwomack\Documents\MCPResearch\results\dense_1-500ms
+[02:58:35] note: something already listens on 5432 (db) -- harmless, the stack reaches these over the compose network
+[02:58:36] preflight ok: docker up, ports free, ollama has qwen3:latest
+[02:58:47] BaseLine: starting fresh (wiping volumes, rebuilding images)
+[02:59:29] BaseLine: cloud Up 34 seconds | db Up 34 seconds (healthy) | mcp-server Up 24 seconds | security-check Up 34 seconds | webapp Up 20 seconds |
+[02:59:56] BaseLine: sweeping 500 delays x 5 trials = 2500 runs
+[03:03:02] BaseLine: through  10 ms  followed 43/50  leak 40/50  (3.1 min)
+[03:06:36] BaseLine: through  20 ms  followed 93/100  leak 86/100  (6.7 min)
+[03:10:23] BaseLine: through  30 ms  followed 143/150  leak 134/150  (10.4 min)
+[03:14:13] BaseLine: through  40 ms  followed 193/200  leak 184/200  (14.3 min)
+[03:18:03] BaseLine: through  50 ms  followed 243/250  leak 233/250  (18.1 min)
+[03:21:55] BaseLine: through  60 ms  followed 293/300  leak 280/300  (22.0 min)
+[03:25:37] BaseLine: through  70 ms  followed 343/350  leak 328/350  (25.7 min)
+[03:29:27] BaseLine: through  80 ms  followed 393/400  leak 375/400  (29.5 min)
+[03:33:08] BaseLine: through  90 ms  followed 443/450  leak 421/450  (33.2 min)
+[03:36:55] BaseLine: through 100 ms  followed 493/500  leak 467/500  (37.0 min)
+[03:40:43] BaseLine: through 110 ms  followed 543/550  leak 513/550  (40.8 min)
+[03:44:29] BaseLine: through 120 ms  followed 593/600  leak 560/600  (44.5 min)
+[03:48:19] BaseLine: through 130 ms  followed 643/650  leak 603/650  (48.4 min)
+[03:52:00] BaseLine: through 140 ms  followed 692/700  leak 646/700  (52.1 min)
+[03:55:49] BaseLine: through 150 ms  followed 742/750  leak 693/750  (55.9 min)
+[03:59:43] BaseLine: through 160 ms  followed 792/800  leak 740/800  (59.8 min)
+[04:03:34] BaseLine: through 170 ms  followed 842/850  leak 788/850  (63.6 min)
+[04:07:24] BaseLine: through 180 ms  followed 892/900  leak 833/900  (67.5 min)
+[04:11:17] BaseLine: through 190 ms  followed 942/950  leak 876/950  (71.3 min)
+[04:15:07] BaseLine: through 200 ms  followed 992/1000  leak 920/1000  (75.2 min)
+[04:18:53] BaseLine: through 210 ms  followed 1042/1050  leak 952/1050  (78.9 min)
+[04:22:28] BaseLine: through 220 ms  followed 1092/1100  leak 981/1100  (82.5 min)
+[04:26:06] BaseLine: through 230 ms  followed 1142/1150  leak 1018/1150  (86.2 min)
+[04:29:37] BaseLine: through 240 ms  followed 1192/1200  leak 1051/1200  (89.7 min)
+[04:33:01] BaseLine: through 250 ms  followed 1242/1250  leak 1086/1250  (93.1 min)
+[04:36:43] BaseLine: through 260 ms  followed 1292/1300  leak 1117/1300  (96.8 min)
+[04:40:12] BaseLine: through 270 ms  followed 1342/1350  leak 1151/1350  (100.3 min)
+[04:43:40] BaseLine: through 280 ms  followed 1392/1400  leak 1193/1400  (103.7 min)
+[04:47:09] BaseLine: through 290 ms  followed 1442/1450  leak 1229/1450  (107.2 min)
+[04:50:54] BaseLine: through 300 ms  followed 1492/1500  leak 1259/1500  (111.0 min)
+[04:54:08] BaseLine: through 310 ms  followed 1542/1550  leak 1300/1550  (114.2 min)
+[04:57:42] BaseLine: through 320 ms  followed 1592/1600  leak 1334/1600  (117.8 min)
+[05:01:19] BaseLine: through 330 ms  followed 1642/1650  leak 1370/1650  (121.4 min)
+[05:05:04] BaseLine: through 340 ms  followed 1692/1700  leak 1407/1700  (125.1 min)
+[05:08:40] BaseLine: through 350 ms  followed 1742/1750  leak 1442/1750  (128.7 min)
+[05:12:11] BaseLine: through 360 ms  followed 1792/1800  leak 1477/1800  (132.2 min)
+[05:15:56] BaseLine: through 370 ms  followed 1842/1850  leak 1509/1850  (136.0 min)
+[05:19:30] BaseLine: through 380 ms  followed 1892/1900  leak 1549/1900  (139.6 min)
+[05:23:04] BaseLine: through 390 ms  followed 1942/1950  leak 1587/1950  (143.1 min)
+[05:26:48] BaseLine: through 400 ms  followed 1992/2000  leak 1626/2000  (146.9 min)
+[05:30:26] BaseLine: through 410 ms  followed 2042/2050  leak 1664/2050  (150.5 min)
+[05:34:11] BaseLine: through 420 ms  followed 2092/2100  leak 1699/2100  (154.2 min)
+[05:37:53] BaseLine: through 430 ms  followed 2142/2150  leak 1735/2150  (157.9 min)
+[05:41:39] BaseLine: through 440 ms  followed 2192/2200  leak 1770/2200  (161.7 min)
+[05:45:17] BaseLine: through 450 ms  followed 2242/2250  leak 1804/2250  (165.3 min)
+[05:48:12] BaseLine: through 460 ms  followed 2271/2300  leak 1825/2300  (168.3 min)
+[05:50:17] BaseLine: through 470 ms  followed 2271/2350  leak 1825/2350  (170.3 min)
+[05:52:18] BaseLine: through 480 ms  followed 2271/2400  leak 1825/2400  (172.4 min)
+[05:54:27] BaseLine: through 490 ms  followed 2271/2450  leak 1825/2450  (174.5 min)
+[05:56:41] BaseLine: through 500 ms  followed 2271/2500  leak 1825/2500  (176.7 min)
+[05:56:41] BaseLine: 2500 trials in 176.7 min -> C:\Users\Bwomack\Documents\MCPResearch\results\dense_1-500ms\20261015_025847_baseline
+[05:56:43] BaseLine: figures rc=0 
+[05:56:47] Tight: starting fresh (wiping volumes, rebuilding images)
+[05:57:30] Tight: cloud Up 35 seconds | db Up 35 seconds (healthy) | mcp-server Up 24 seconds | security-check Up 35 seconds | webapp Up 20 seconds |
+[05:57:38] Tight: sweeping 500 delays x 5 trials = 2500 runs
+[06:00:45] Tight: through  10 ms  followed 45/50  leak 42/50  (3.1 min)
+[06:04:09] Tight: through  20 ms  followed 95/100  leak 82/100  (6.5 min)
+[06:06:52] Tight: through  30 ms  followed 127/150  leak 113/150  (9.2 min)
+[06:08:09] Tight: through  40 ms  followed 128/200  leak 114/200  (10.5 min)
+[06:09:22] Tight: through  50 ms  followed 128/250  leak 114/250  (11.7 min)
+[06:10:36] Tight: through  60 ms  followed 128/300  leak 114/300  (13.0 min)
+[06:11:52] Tight: through  70 ms  followed 128/350  leak 114/350  (14.2 min)
+[06:13:07] Tight: through  80 ms  followed 128/400  leak 114/400  (15.5 min)
+[06:14:25] Tight: through  90 ms  followed 128/450  leak 114/450  (16.8 min)
+[06:15:38] Tight: through 100 ms  followed 128/500  leak 114/500  (18.0 min)
+[06:16:53] Tight: through 110 ms  followed 128/550  leak 114/550  (19.2 min)
+[06:18:08] Tight: through 120 ms  followed 128/600  leak 114/600  (20.5 min)
+[06:19:23] Tight: through 130 ms  followed 128/650  leak 114/650  (21.7 min)
+[06:20:37] Tight: through 140 ms  followed 128/700  leak 114/700  (23.0 min)
+[06:21:54] Tight: through 150 ms  followed 128/750  leak 114/750  (24.3 min)
+[06:23:06] Tight: through 160 ms  followed 128/800  leak 114/800  (25.5 min)
+[06:24:24] Tight: through 170 ms  followed 128/850  leak 114/850  (26.8 min)
+[06:25:39] Tight: through 180 ms  followed 128/900  leak 114/900  (28.0 min)
+[06:26:56] Tight: through 190 ms  followed 128/950  leak 114/950  (29.3 min)
+[06:28:17] Tight: through 200 ms  followed 128/1000  leak 114/1000  (30.6 min)
+[06:29:56] Tight: through 210 ms  followed 128/1050  leak 114/1050  (32.3 min)
+[06:31:42] Tight: through 220 ms  followed 129/1100  leak 115/1100  (34.1 min)
+[06:33:09] Tight: through 230 ms  followed 129/1150  leak 115/1150  (35.5 min)
+[06:34:37] Tight: through 240 ms  followed 129/1200  leak 115/1200  (37.0 min)
+[06:36:22] Tight: through 250 ms  followed 129/1250  leak 115/1250  (38.7 min)
+[06:38:04] Tight: through 260 ms  followed 129/1300  leak 115/1300  (40.4 min)
+[06:39:43] Tight: through 270 ms  followed 129/1350  leak 115/1350  (42.1 min)
+[06:41:22] Tight: through 280 ms  followed 129/1400  leak 115/1400  (43.7 min)
+[06:43:01] Tight: through 290 ms  followed 129/1450  leak 115/1450  (45.4 min)
+[06:44:41] Tight: through 300 ms  followed 129/1500  leak 115/1500  (47.0 min)
+[06:46:20] Tight: through 310 ms  followed 129/1550  leak 115/1550  (48.7 min)
+[06:48:06] Tight: through 320 ms  followed 129/1600  leak 115/1600  (50.5 min)
+[06:49:49] Tight: through 330 ms  followed 129/1650  leak 115/1650  (52.2 min)
+[06:51:22] Tight: through 340 ms  followed 129/1700  leak 115/1700  (53.7 min)
+[06:52:59] Tight: through 350 ms  followed 129/1750  leak 115/1750  (55.4 min)
+[06:54:39] Tight: through 360 ms  followed 129/1800  leak 115/1800  (57.0 min)
+[06:56:18] Tight: through 370 ms  followed 129/1850  leak 115/1850  (58.7 min)
+[06:57:55] Tight: through 380 ms  followed 129/1900  leak 115/1900  (60.3 min)
+[06:59:31] Tight: through 390 ms  followed 129/1950  leak 115/1950  (61.9 min)
+[07:01:05] Tight: through 400 ms  followed 129/2000  leak 115/2000  (63.4 min)
+[07:02:51] Tight: through 410 ms  followed 129/2050  leak 115/2050  (65.2 min)
+[07:04:29] Tight: through 420 ms  followed 129/2100  leak 115/2100  (66.8 min)
+[07:06:27] Tight: through 430 ms  followed 129/2150  leak 115/2150  (68.8 min)
+[07:08:12] Tight: through 440 ms  followed 129/2200  leak 115/2200  (70.6 min)
+[07:09:56] Tight: through 450 ms  followed 129/2250  leak 115/2250  (72.3 min)
+[07:11:39] Tight: through 460 ms  followed 129/2300  leak 115/2300  (74.0 min)
+[07:13:21] Tight: through 470 ms  followed 129/2350  leak 115/2350  (75.7 min)
+[07:15:08] Tight: through 480 ms  followed 129/2400  leak 115/2400  (77.5 min)
+[07:17:04] Tight: through 490 ms  followed 129/2450  leak 115/2450  (79.4 min)
+[07:18:43] Tight: through 500 ms  followed 129/2500  leak 115/2500  (81.1 min)
+[07:18:43] Tight: 2500 trials in 81.1 min -> C:\Users\Bwomack\Documents\MCPResearch\results\dense_1-500ms\20261015_055647_tight
+[07:18:47] Tight: figures rc=0 
+[07:18:51] Tight-both: starting fresh (wiping volumes, rebuilding images)
+[07:19:34] Tight-both: cloud Up 35 seconds | db Up 35 seconds (healthy) | mcp-server Up 25 seconds | security-check Up 35 seconds | webapp Up 20 seconds |
+[07:19:43] Tight-both: sweeping 500 delays x 5 trials = 2500 runs
+[07:23:09] Tight-both: through  10 ms  followed 44/50  leak 7/50  (3.4 min)
+[07:26:55] Tight-both: through  20 ms  followed 94/100  leak 18/100  (7.2 min)
+[07:29:38] Tight-both: through  30 ms  followed 112/150  leak 19/150  (9.9 min)
+[07:31:44] Tight-both: through  40 ms  followed 114/200  leak 19/200  (12.0 min)
+[07:33:45] Tight-both: through  50 ms  followed 114/250  leak 19/250  (14.1 min)
+[07:35:46] Tight-both: through  60 ms  followed 114/300  leak 19/300  (16.1 min)
+[07:37:48] Tight-both: through  70 ms  followed 114/350  leak 19/350  (18.1 min)
+[07:39:49] Tight-both: through  80 ms  followed 114/400  leak 19/400  (20.1 min)
+[07:41:52] Tight-both: through  90 ms  followed 114/450  leak 19/450  (22.2 min)
+[07:43:54] Tight-both: through 100 ms  followed 114/500  leak 19/500  (24.2 min)
+[07:45:57] Tight-both: through 110 ms  followed 114/550  leak 19/550  (26.3 min)
+[07:48:00] Tight-both: through 120 ms  followed 114/600  leak 19/600  (28.3 min)
+[07:50:04] Tight-both: through 130 ms  followed 114/650  leak 19/650  (30.4 min)
+[07:52:08] Tight-both: through 140 ms  followed 114/700  leak 19/700  (32.4 min)
+[07:54:12] Tight-both: through 150 ms  followed 114/750  leak 19/750  (34.5 min)
+[07:56:16] Tight-both: through 160 ms  followed 114/800  leak 19/800  (36.6 min)
+[07:58:21] Tight-both: through 170 ms  followed 114/850  leak 19/850  (38.7 min)
+[08:00:27] Tight-both: through 180 ms  followed 114/900  leak 19/900  (40.8 min)
+[08:02:32] Tight-both: through 190 ms  followed 114/950  leak 19/950  (42.8 min)
+[08:04:37] Tight-both: through 200 ms  followed 114/1000  leak 19/1000  (44.9 min)
+[08:06:44] Tight-both: through 210 ms  followed 114/1050  leak 19/1050  (47.0 min)
+[08:08:50] Tight-both: through 220 ms  followed 114/1100  leak 19/1100  (49.1 min)
+[08:10:56] Tight-both: through 230 ms  followed 114/1150  leak 19/1150  (51.2 min)
+[08:13:03] Tight-both: through 240 ms  followed 114/1200  leak 19/1200  (53.4 min)
+[08:15:10] Tight-both: through 250 ms  followed 114/1250  leak 19/1250  (55.5 min)
+[08:17:17] Tight-both: through 260 ms  followed 114/1300  leak 19/1300  (57.6 min)
+[08:19:25] Tight-both: through 270 ms  followed 114/1350  leak 19/1350  (59.7 min)
+[08:21:33] Tight-both: through 280 ms  followed 114/1400  leak 19/1400  (61.8 min)
+[08:23:41] Tight-both: through 290 ms  followed 114/1450  leak 19/1450  (64.0 min)
+[08:25:49] Tight-both: through 300 ms  followed 114/1500  leak 19/1500  (66.1 min)
+[08:27:57] Tight-both: through 310 ms  followed 114/1550  leak 19/1550  (68.3 min)
+[08:30:06] Tight-both: through 320 ms  followed 114/1600  leak 19/1600  (70.4 min)
+[08:32:16] Tight-both: through 330 ms  followed 114/1650  leak 19/1650  (72.6 min)
+[08:34:25] Tight-both: through 340 ms  followed 114/1700  leak 19/1700  (74.7 min)
+[08:36:34] Tight-both: through 350 ms  followed 114/1750  leak 19/1750  (76.9 min)
+[08:38:44] Tight-both: through 360 ms  followed 114/1800  leak 19/1800  (79.0 min)
+[08:40:54] Tight-both: through 370 ms  followed 114/1850  leak 19/1850  (81.2 min)
+[08:43:04] Tight-both: through 380 ms  followed 114/1900  leak 19/1900  (83.4 min)
+[08:45:14] Tight-both: through 390 ms  followed 114/1950  leak 19/1950  (85.5 min)
+[08:47:25] Tight-both: through 400 ms  followed 114/2000  leak 19/2000  (87.7 min)
+[08:49:35] Tight-both: through 410 ms  followed 114/2050  leak 19/2050  (89.9 min)
+[08:51:46] Tight-both: through 420 ms  followed 114/2100  leak 19/2100  (92.1 min)
+[08:53:57] Tight-both: through 430 ms  followed 114/2150  leak 19/2150  (94.3 min)
+[08:56:09] Tight-both: through 440 ms  followed 114/2200  leak 19/2200  (96.5 min)
+[08:58:21] Tight-both: through 450 ms  followed 114/2250  leak 19/2250  (98.6 min)
+[09:00:33] Tight-both: through 460 ms  followed 114/2300  leak 19/2300  (100.8 min)
+[09:02:45] Tight-both: through 470 ms  followed 114/2350  leak 19/2350  (103.1 min)
+[09:04:58] Tight-both: through 480 ms  followed 114/2400  leak 19/2400  (105.3 min)
+[09:07:10] Tight-both: through 490 ms  followed 114/2450  leak 19/2450  (107.5 min)
+[09:09:22] Tight-both: through 500 ms  followed 114/2500  leak 19/2500  (109.7 min)
+[09:09:22] Tight-both: 2500 trials in 109.7 min -> C:\Users\Bwomack\Documents\MCPResearch\results\dense_1-500ms\20261015_071851_tight-both
+[09:09:24] Tight-both: figures rc=0 
+[09:09:28] Secure: starting fresh (wiping volumes, rebuilding images)
+[09:10:11] Secure: cloud Up 35 seconds | db Up 35 seconds (healthy) | mcp-server Up 24 seconds | security-check Up 35 seconds | webapp Up 20 seconds |
+[09:10:17] Secure: sweeping 500 delays x 5 trials = 2500 runs
+[09:11:23] Secure: through  10 ms  followed 0/50  leak 0/50  (1.1 min)
+[09:12:35] Secure: through  20 ms  followed 0/100  leak 0/100  (2.3 min)
+[09:13:48] Secure: through  30 ms  followed 0/150  leak 0/150  (3.5 min)
+[09:15:02] Secure: through  40 ms  followed 0/200  leak 0/200  (4.8 min)
+[09:16:17] Secure: through  50 ms  followed 0/250  leak 0/250  (6.0 min)
+[09:17:32] Secure: through  60 ms  followed 0/300  leak 0/300  (7.2 min)
+[09:18:46] Secure: through  70 ms  followed 0/350  leak 0/350  (8.5 min)
+[09:20:02] Secure: through  80 ms  followed 0/400  leak 0/400  (9.7 min)
+[09:21:17] Secure: through  90 ms  followed 0/450  leak 0/450  (11.0 min)
+[09:22:32] Secure: through 100 ms  followed 0/500  leak 0/500  (12.2 min)
+[09:23:48] Secure: through 110 ms  followed 0/550  leak 0/550  (13.5 min)
+[09:25:03] Secure: through 120 ms  followed 0/600  leak 0/600  (14.8 min)
+[09:26:19] Secure: through 130 ms  followed 0/650  leak 0/650  (16.0 min)
+[09:27:36] Secure: through 140 ms  followed 0/700  leak 0/700  (17.3 min)
+[09:28:52] Secure: through 150 ms  followed 0/750  leak 0/750  (18.6 min)
+[09:30:09] Secure: through 160 ms  followed 0/800  leak 0/800  (19.9 min)
+[09:31:25] Secure: through 170 ms  followed 0/850  leak 0/850  (21.1 min)
+[09:32:43] Secure: through 180 ms  followed 0/900  leak 0/900  (22.4 min)
+[09:34:00] Secure: through 190 ms  followed 0/950  leak 0/950  (23.7 min)
+[09:35:19] Secure: through 200 ms  followed 0/1000  leak 0/1000  (25.0 min)
+[09:36:37] Secure: through 210 ms  followed 0/1050  leak 0/1050  (26.3 min)
+[09:37:57] Secure: through 220 ms  followed 0/1100  leak 0/1100  (27.7 min)
+[09:39:16] Secure: through 230 ms  followed 0/1150  leak 0/1150  (29.0 min)
+[09:40:36] Secure: through 240 ms  followed 0/1200  leak 0/1200  (30.3 min)
+[09:41:55] Secure: through 250 ms  followed 0/1250  leak 0/1250  (31.6 min)
+[09:43:16] Secure: through 260 ms  followed 0/1300  leak 0/1300  (33.0 min)
+[09:44:36] Secure: through 270 ms  followed 0/1350  leak 0/1350  (34.3 min)
+[09:45:55] Secure: through 280 ms  followed 0/1400  leak 0/1400  (35.6 min)
+[09:47:15] Secure: through 290 ms  followed 0/1450  leak 0/1450  (37.0 min)
+[09:48:35] Secure: through 300 ms  followed 0/1500  leak 0/1500  (38.3 min)
+[09:49:55] Secure: through 310 ms  followed 0/1550  leak 0/1550  (39.6 min)
+[09:51:18] Secure: through 320 ms  followed 0/1600  leak 0/1600  (41.0 min)
+[09:52:40] Secure: through 330 ms  followed 0/1650  leak 0/1650  (42.4 min)
+[09:54:02] Secure: through 340 ms  followed 0/1700  leak 0/1700  (43.7 min)
+[09:55:24] Secure: through 350 ms  followed 0/1750  leak 0/1750  (45.1 min)
+[09:56:46] Secure: through 360 ms  followed 0/1800  leak 0/1800  (46.5 min)
+[09:58:09] Secure: through 370 ms  followed 0/1850  leak 0/1850  (47.9 min)
+[09:59:31] Secure: through 380 ms  followed 0/1900  leak 0/1900  (49.2 min)
+[10:00:54] Secure: through 390 ms  followed 0/1950  leak 0/1950  (50.6 min)
+[10:02:17] Secure: through 400 ms  followed 0/2000  leak 0/2000  (52.0 min)
+[10:03:41] Secure: through 410 ms  followed 0/2050  leak 0/2050  (53.4 min)
+[10:05:04] Secure: through 420 ms  followed 0/2100  leak 0/2100  (54.8 min)
+[10:06:34] Secure: through 430 ms  followed 0/2150  leak 0/2150  (56.3 min)
+[10:08:34] Secure: through 440 ms  followed 0/2200  leak 0/2200  (58.3 min)
+[10:10:31] Secure: through 450 ms  followed 0/2250  leak 0/2250  (60.2 min)
+[10:12:28] Secure: through 460 ms  followed 0/2300  leak 0/2300  (62.2 min)
+[10:14:31] Secure: through 470 ms  followed 0/2350  leak 0/2350  (64.2 min)
+[10:16:32] Secure: through 480 ms  followed 0/2400  leak 0/2400  (66.3 min)
+[10:18:34] Secure: through 490 ms  followed 0/2450  leak 0/2450  (68.3 min)
+[10:20:37] Secure: through 500 ms  followed 0/2500  leak 0/2500  (70.3 min)
+[10:20:38] Secure: 2500 trials in 70.3 min -> C:\Users\Bwomack\Documents\MCPResearch\results\dense_1-500ms\20261015_090928_secure
+[10:20:39] Secure: figures rc=0 
+[10:20:46] combined figures rc=0 
+[10:20:46] ALL DONE

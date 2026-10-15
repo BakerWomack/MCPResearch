@@ -1,7 +1,3 @@
-"""
-HTTP client for the MCP server (FastMCP over SSE).
-"""
-
 import ast
 import json
 import os
@@ -17,11 +13,6 @@ if "/sse" not in MCP_URL:
 
 
 def _unwrap_tool_output_repr(s: str) -> str:
-    """
-    FastMCP sometimes exposes tool results as str() like:
-    chat_directOutput(result='Hello\\nWorld')
-    Return only the inner string literal.
-    """
     if not s or "result=" not in s:
         return s
     t = s.strip().rstrip(",").strip()
@@ -95,17 +86,24 @@ async def _call(tool: str, args: dict) -> str:
         return _text_from_result(res)
 
 
-async def run_workflow(document_id: int, user_prompt: str) -> str:
+async def run_workflow(document_id: int, user_prompt: str, history_json: str = "[]") -> str:
     try:
-        text = await _call("run_workflow", {"document_id": document_id, "user_prompt": user_prompt})
+        text = await _call("run_workflow", {
+            "document_id": document_id,
+            "user_prompt": user_prompt,
+            "history_json": history_json,
+        })
         return text or "(No response)"
     except Exception as e:
         return f"Error calling MCP server: {e}"
 
 
-async def run_chat(user_prompt: str) -> str:
+async def run_chat(user_prompt: str, history_json: str = "[]") -> str:
     try:
-        text = await _call("chat_direct", {"user_prompt": user_prompt})
+        text = await _call("chat_direct", {
+            "user_prompt": user_prompt,
+            "history_json": history_json,
+        })
         return text or "(No response)"
     except Exception as e:
         return f"Error calling MCP server: {e}"

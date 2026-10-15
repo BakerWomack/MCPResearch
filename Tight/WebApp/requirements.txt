@@ -2,6 +2,8 @@ fastapi
 uvicorn[standard]
 python-multipart
 aiofiles
-fastmcp
+fastmcp<3
 httpx
 sqlalchemy
+psycopg[binary]
+pyjwt
