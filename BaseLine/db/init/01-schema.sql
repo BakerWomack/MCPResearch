@@ -15,8 +15,7 @@ CREATE TABLE documents (
     blob_key   VARCHAR UNIQUE NOT NULL,
     safe       BOOLEAN DEFAULT FALSE,
     checked_at TIMESTAMPTZ,
-    created_at TIMESTAMPTZ DEFAULT now(),
-    sechash    VARCHAR
+    created_at TIMESTAMPTZ DEFAULT now()
 );
 
 CREATE INDEX ix_clients_id ON clients (id);

@@ -67,7 +67,6 @@ class DocumentRow(NamedTuple):
     id: int
     blob_key: str
     safe: bool
-    sechash: str | None
 
 
 def _load_document(document_id: int, op: str) -> "DocumentRow | None":
@@ -77,7 +76,7 @@ def _load_document(document_id: int, op: str) -> "DocumentRow | None":
             doc = db.query(models.Document).filter(models.Document.id == document_id).first()
         if doc is None:
             return None
-        return DocumentRow(doc.id, doc.blob_key, doc.safe, doc.sechash)
+        return DocumentRow(doc.id, doc.blob_key, doc.safe)
     finally:
         db.close()
 

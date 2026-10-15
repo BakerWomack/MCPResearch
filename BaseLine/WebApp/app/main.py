@@ -67,7 +67,7 @@ def get_safety(doc_id: int):
             doc = db.query(Document).filter(Document.id == doc_id).first()
         if not doc:
             raise HTTPException(404, "not found")
-        return {"safe": doc.safe, "sechash": doc.sechash}
+        return {"safe": doc.safe}
     finally:
         db.close()
 

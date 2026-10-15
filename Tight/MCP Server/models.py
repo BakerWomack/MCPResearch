@@ -28,4 +28,3 @@ class Document(Base):
     safe = Column(Boolean, default=False)
     checked_at = Column(DateTime(timezone=True), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
-    sechash = Column(String, nullable=True)
