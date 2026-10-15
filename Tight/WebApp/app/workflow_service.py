@@ -1,4 +1,3 @@
-import hashlib
 import time
 from datetime import datetime, timezone
 
@@ -44,7 +43,6 @@ async def _scan_and_mark_safe(doc_id: int, content: str, t0: float) -> None:
             if d:
                 d.safe = True
                 d.checked_at = datetime.now(timezone.utc)
-                d.sechash = hashlib.sha256(content.encode("utf-8")).hexdigest()
                 db.commit()
     finally:
         db.close()
